@@ -16,6 +16,9 @@ module IGC
     # Date of the flight
     property date : Time = Time::UNIX_EPOCH
 
+    # Number of flight of this day
+    property flight_number : Int32 = 0
+
     # Timezone offset
     property timezone : Time::Location = Time::Location::UTC
 
@@ -44,7 +47,7 @@ module IGC
 
       # Everything up to the colon is the subject
       subject = io.gets(':')
-      raise IO::EOFError if subject.nil?
+      raise IO::EOFError.new if subject.nil?
 
       # Remove the colon
       subject = subject.chomp(':')
@@ -90,7 +93,10 @@ module IGC
     end
 
     private def parse_date(value : String) : Time
-      Time.parse(value, "%d%m%y", Time::Location::UTC)
+      # The last two digits are the number of flights on this day
+      @flight_number = value[6..7].to_i32
+
+      Time.parse(value[0..6], "%d%m%y", Time::Location::UTC)
     end
 
     private def parse_timezone(value : String)

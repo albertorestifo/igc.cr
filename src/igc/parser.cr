@@ -12,7 +12,7 @@ module IGC
     end
 
     # Created a new parser from any IO, like a file
-    def initialzie(@io : IO)
+    def initialize(@io : IO)
       @file = ::IGC::File.new
       @eof = false
 
@@ -39,7 +39,7 @@ module IGC
       when "J"
         @k_extensions = parse_extensions
       when "C"
-        @file.task = Task.from_igc(io)
+        @file.task = Task.from_igc(@io)
       when nil
         @eof = true
       end

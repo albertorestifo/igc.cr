@@ -3,13 +3,13 @@ module IGC
   class Task
     property time : Time
     property description : String
-    property start : Point
-    property finish : Point
+    property start : Point = Point.zero
+    property finish : Point = Point.zero
     property turn_points : Array(Point)? = nil
     property takeoff : Point? = nil
     property landing : Point? = nil
 
-    def initialize(@time, @description, @start, @finish, @turn_points, @takeoff, @landing)
+    def initialize(@time, @description)
     end
 
     # Creates a task definition by parsing an IGC file
@@ -59,12 +59,17 @@ module IGC
         @takeoff = Point.new(coords, io.read_line)
       when "TU"
         io.skip(2)
-        @turn_points ||= [] of LatLon
-        @turn_points << Point.new(coords, io.read_line)
+        tp = @turn_points ||= [] of Point
+        tp << Point.new(coords, io.read_line)
+        @turn_points = tp
       when "ST"
         # START
         io.skip(3)
         @start = Point.new(coords, io.read_line)
+      when "LA"
+        # LANDING
+        io.skip(5)
+        @landing = Point.new(coords, io.read_line)
       when "FI"
         # FINISH
         io.skip(4)
