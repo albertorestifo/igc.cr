@@ -80,5 +80,8 @@ module IGC
     property pressure_sensor : String?
     property firmware_version : String?
     property hardware_version : String?
+
+    # Fix records extensions, as parsed from the I record
+    property fix_extensions : Hash(String, Tuple(Int32, Int32)) = {} of String => Tuple(Int32, Int32)
   end
 end

@@ -28,6 +28,8 @@ module IGC
         parse_fr_id(line)
       when 'H'
         parse_header(line)
+      when 'I'
+        parse_fix_extensions(line)
       end
     end
 
@@ -104,6 +106,24 @@ module IGC
       return if @file.date.location == @file.timezone
 
       @file.date = Time.local(@file.date.year, @file.date.month, @file.date.day, location: @file.timezone)
+    end
+
+    private def parse_fix_extensions(line : String)
+      io = IO::Memory.new(line)
+
+      # First byte is the header identifier
+      io.skip(1)
+
+      nr_extensions = io.read_string(2).to_i32
+
+      # Parse each of the extensions
+      nr_extensions.times do
+        start_byte = io.read_string(2).to_i32
+        end_byte = io.read_string(2).to_i32
+        short_code = io.read_string(3)
+
+        @file.fix_extensions[short_code] = {start_byte, end_byte}
+      end
     end
 
     private def if_known(value) : String?
