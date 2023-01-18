@@ -43,6 +43,12 @@ module IGC
         @k_extensions = parse_extensions
       when "C"
         @file.task = Task.from_igc(@io)
+      when "G"
+        signature = @file.security_signature || ""
+        signature + @io.read_line
+        @file.security_signature = signature
+      when "B"
+        @file.fixes << parse_fix
       when nil
         @eof = true
       else
@@ -64,10 +70,43 @@ module IGC
         extensions[short_code] = {start_byte, end_byte}
       end
 
+      # Ensure the extensions are sorted by start byte
+
       # Complete the line
       @io.gets
 
       extensions
+    end
+
+    private def parse_fix
+      hours = @io.read_string(2).to_i32
+      minutes = @io.read_string(2).to_i32
+      seconds = @io.read_string(2).to_i32
+
+      date = @file.headers.date
+      time = Time.utc(date.year, date.month, date.day, hours, minutes, seconds)
+
+      coords = LatLon.from_igc(@io)
+      valid = @io.read_string(1) == "A"
+
+      pressure_altitude = @io.read_string(5).to_i32
+      gnss_altitude = @io.read_string(5).to_i32
+
+      fix = Fix.new(coords: coords, time: time, valid: valid, pressure_altitude: pressure_altitude, gnss_altitude: gnss_altitude)
+
+      extensions = @io.read_line
+      return fix if @b_extensions.empty?
+
+      # We have already read a bunch of bytes, which we need to subtract from the start and end bytes
+      diff = 36
+
+      @b_extensions.each do |key, position|
+        start_byte = position[0] - diff
+        end_byte = position[1] - diff
+        fix.extensions[key] = extensions[start_byte..end_byte]
+      end
+
+      fix
     end
 
     private def if_known(value) : String?

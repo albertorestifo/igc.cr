@@ -4,6 +4,9 @@ FAI Compliant IGC file parser.
 
 Implemented version: [2020-11-25](https://www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf)
 
+- [x] Parse a IGC file
+- [ ] Write an IGC file
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:

@@ -29,6 +29,26 @@ describe IGC do
       task.takeoff.not_nil!.description.should eq("Lasham Clubhouse")
       task.takeoff.not_nil!.coords.lat.should eq(51.190315.to_f32)
       task.takeoff.not_nil!.coords.lon.should eq(-1.031917.to_f32)
+
+      parsed.fixes.size.should eq(9)
+
+      fix = parsed.fixes.first
+      fix.should_not be_nil
+      next if fix.nil?
+
+      # I 03 36-38 FXA 39-40 SIU 41-43 ENL
+      # B 16:02:40 5407121N 00249342W A 00280 00421 055 09 950
+
+      fix.time.should eq(Time.utc(2019, 8, 16, 16, 2, 40))
+      fix.coords.lat.should eq(54.118683.to_f32)
+      fix.coords.lon.should eq(-2.822367.to_f32)
+      fix.valid?.should be_true
+      fix.pressure_altitude.should eq(280)
+      fix.gnss_altitude.should eq(421)
+      fix.extensions.size.should eq(3)
+      fix.extensions["FXA"].should eq("055")
+      fix.extensions["SIU"].should eq("09")
+      fix.extensions["ENL"].should eq("950")
     end
   end
 end
