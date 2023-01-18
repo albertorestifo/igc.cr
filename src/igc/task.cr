@@ -17,7 +17,8 @@ module IGC
       # At first, we're being passed the first line, which contains the shared information
 
       # Next 12 bytes are the date and time
-      time = Time.parse(io.read_string(12), "%d%m%y%H%M%S", Time::Location::UTC)
+      full_time = io.read_string(12)
+      time = Time.parse(full_time, "%d%m%y%H%M%S", Time::Location::UTC)
 
       # The next 6 bytes are the "date of flight", which is legacy so we just skip
       io.skip(6)
@@ -41,6 +42,8 @@ module IGC
         break unless next_buff[0].unsafe_chr == 'C'
         task.parse_igc_waypoint(io)
       end
+
+      task
     end
 
     # Add a new waypoint from a C line

@@ -29,6 +29,9 @@ module IGC
     end
 
     private def parse_line
+      # Debugging:
+      # puts "PARSING LINE #{String.new(@io.peek.not_nil!, "UTF-8", :skip).split("\n").first}"
+
       case @io.gets(1)
       when "A"
         @file.flight_recorder_id = @io.read_line
@@ -42,6 +45,9 @@ module IGC
         @file.task = Task.from_igc(@io)
       when nil
         @eof = true
+      else
+        # Skip line
+        @io.gets
       end
     end
 
@@ -57,6 +63,9 @@ module IGC
 
         extensions[short_code] = {start_byte, end_byte}
       end
+
+      # Complete the line
+      @io.gets
 
       extensions
     end

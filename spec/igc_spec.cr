@@ -5,7 +5,7 @@ describe IGC do
     it "parses the sample file provided in the official documentation" do
       parsed = File.open("spec/fixtures/official_example.igc") { |file| IGC.parse(file) }
 
-      parsed.flight_recorder_id.should eq("AMXYZ")
+      parsed.flight_recorder_id.should eq("CAMXYZ")
 
       # Validate headers
       parsed.headers.headers.size.should eq(13)
@@ -27,8 +27,8 @@ describe IGC do
       task.time.should eq(Time.utc(2015, 8, 21, 9, 38, 41))
       task.description.should eq("500K Triangle")
       task.takeoff.not_nil!.description.should eq("Lasham Clubhouse")
-      task.takeoff.not_nil!.coords.lat.should eq(6.856983)
-      task.takeoff.not_nil!.coords.lon.should eq(-1.031916)
+      task.takeoff.not_nil!.coords.lat.should eq(51.190315.to_f32)
+      task.takeoff.not_nil!.coords.lon.should eq(-1.031917.to_f32)
     end
   end
 end
