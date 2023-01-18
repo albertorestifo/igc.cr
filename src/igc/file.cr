@@ -83,5 +83,11 @@ module IGC
 
     # Fix records extensions, as parsed from the I record
     property fix_extensions : Hash(String, Tuple(Int32, Int32)) = {} of String => Tuple(Int32, Int32)
+
+    # K record extensions, as parsed from the J record
+    property k_extensions : Hash(String, Tuple(Int32, Int32)) = {} of String => Tuple(Int32, Int32)
+
+    # Task definition, if specified
+    property task : Task?
   end
 end

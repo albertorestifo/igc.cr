@@ -29,7 +29,15 @@ module IGC
       when 'H'
         parse_header(line)
       when 'I'
-        parse_fix_extensions(line)
+        @file.fix_extensions = parse_extensions(line)
+      when 'J'
+        @file.k_extensions = parse_extensions(line)
+      when 'C'
+        if @file.task.nil?
+          @file.task = Task.from_c_header(line)
+        else
+          @file.task.parse_c_line(line)
+        end
       end
     end
 
@@ -92,7 +100,7 @@ module IGC
     end
 
     private def parse_date(value : String) : Time
-      Time.parse(value, "%d%m%Y", @file.timezone)
+      Time.parse(value, "%d%m%y", @file.timezone)
     end
 
     private def set_timezone(value : String)
@@ -108,13 +116,14 @@ module IGC
       @file.date = Time.local(@file.date.year, @file.date.month, @file.date.day, location: @file.timezone)
     end
 
-    private def parse_fix_extensions(line : String)
+    private def parse_extensions(line : String) : Hash(String, Tuple(Int32, Int32))
       io = IO::Memory.new(line)
 
       # First byte is the header identifier
       io.skip(1)
 
       nr_extensions = io.read_string(2).to_i32
+      extensions = {} of String => Tuple(Int32, Int32)
 
       # Parse each of the extensions
       nr_extensions.times do
@@ -122,8 +131,10 @@ module IGC
         end_byte = io.read_string(2).to_i32
         short_code = io.read_string(3)
 
-        @file.fix_extensions[short_code] = {start_byte, end_byte}
+        extensions[short_code] = {start_byte, end_byte}
       end
+
+      extensions
     end
 
     private def if_known(value) : String?
