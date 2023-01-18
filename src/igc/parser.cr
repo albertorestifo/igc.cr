@@ -106,6 +106,15 @@ module IGC
         fix.extensions[key] = extensions[start_byte..end_byte]
       end
 
+      fix.populate_known_extensions
+
+      # Adjust time with TDS if present
+      if fix.extensions.has_key?("TDS")
+        decimal_seconds = fix.extensions["TDS"].to_i32
+        nanoseconds = decimal_seconds * 10_000_000
+        fix.time = Time.utc(time.year, time.month, time.day, time.hour, time.minute, time.second, nanosecond: nanoseconds)
+      end
+
       fix
     end
 
