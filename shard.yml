@@ -1,0 +1,9 @@
+name: igc
+version: 0.1.0
+
+authors:
+  - Alberto Restifo <alberto@restifo.dev>
+
+crystal: 1.7.0
+
+license: MIT
