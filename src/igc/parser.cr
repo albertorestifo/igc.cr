@@ -49,6 +49,8 @@ module IGC
         @file.security_signature = signature
       when "B"
         @file.fixes << parse_fix
+      when "K"
+        @file.datapoints << parse_k_record
       when nil
         @eof = true
       else
@@ -69,8 +71,6 @@ module IGC
 
         extensions[short_code] = {start_byte, end_byte}
       end
-
-      # Ensure the extensions are sorted by start byte
 
       # Complete the line
       @io.gets
@@ -116,6 +116,24 @@ module IGC
       end
 
       fix
+    end
+
+    private def parse_k_record
+      hours = @io.read_string(2).to_i32
+      minutes = @io.read_string(2).to_i32
+      seconds = @io.read_string(2).to_i32
+
+      date = @file.headers.date
+      time = Time.utc(date.year, date.month, date.day, hours, minutes, seconds)
+
+      data = {} of String => String
+      @k_extensions.each do |key, position|
+        start_byte = position[0] - diff
+        end_byte = position[1] - diff
+        data.extensions[key] = extensions[start_byte..end_byte]
+      end
+
+      Datapoint.new(time: time, data: data)
     end
 
     private def if_known(value) : String?

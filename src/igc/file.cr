@@ -14,5 +14,8 @@ module IGC
 
     # All the fixes recorded in the file
     property fixes : Array(Fix) = [] of Fix
+
+    # Extra datapoints recorded at regular intervals (K records)
+    property datapoints : Array(Datapoint) = [] of Datapoint
   end
 end

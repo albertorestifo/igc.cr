@@ -4,8 +4,20 @@ FAI Compliant IGC file parser.
 
 Implemented version: [2020-11-25](https://www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf)
 
-- [x] Parse a IGC file
-- [ ] Write an IGC file
+- [ ] IGC File parsing:
+
+  - [x] A record - Flight Recorder Identification
+  - [x] H record - Headers
+  - [x] I record - Additions to the B record
+  - [x] J record - Additions to the K record
+  - [x] C record - Task
+  - [x] G record - Security
+  - [x] B record - Fixes
+  - [ ] E record - Events
+  - [ ] F record - Satellite Constellations
+  - [x] K record - Data needed less frequently than fixes
+
+- [ ] IGC File writing
 
 ## Installation
 
