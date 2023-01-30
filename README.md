@@ -16,6 +16,8 @@ Implemented version: [2020-11-25](https://www.fai.org/sites/default/files/igc_fr
   - [ ] E record - Events
   - [ ] F record - Satellite Constellations
   - [x] K record - Data needed less frequently than fixes
+  - [ ] L record - Comments
+  - [ ] D record - Differential GNSS
 
 - [ ] IGC File writing
 
