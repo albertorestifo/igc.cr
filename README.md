@@ -38,7 +38,7 @@ Implemented version: [2020-11-25](https://www.fai.org/sites/default/files/igc_fr
 ```crystal
 require "igc"
 
-parsed = File.open("my_flight.igc) do |file|
+parsed = File.open("my_flight.igc") do |file|
   IGC.parse(file)
 end
 
@@ -52,10 +52,6 @@ The result of calling `IGC.parse` is an instance of `IGC::File`, with properties
 - `task`: Task definition (if present)
 - `fixes`: Array of fixes recorded in the file
 - `datapoints`: Extra data recorded at regular intervals
-
-## Development
-
-TODO: Write development instructions here
 
 ## Contributing
 

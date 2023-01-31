@@ -126,11 +126,15 @@ module IGC
       date = @file.headers.date
       time = Time.utc(date.year, date.month, date.day, hours, minutes, seconds)
 
+      # We have already read a bunch of bytes, which we need to subtract from the start and end bytes
+      diff = 7
+      extensions = @io.read_line
+
       data = {} of String => String
       @k_extensions.each do |key, position|
         start_byte = position[0] - diff
         end_byte = position[1] - diff
-        data.extensions[key] = extensions[start_byte..end_byte]
+        data[key] = extensions[start_byte..end_byte]
       end
 
       Datapoint.new(time: time, data: data)
