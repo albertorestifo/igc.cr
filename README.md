@@ -1,5 +1,7 @@
 # igc
 
+[![CI](https://github.com/albertorestifo/igc.cr/actions/workflows/test.yml/badge.svg)](https://github.com/albertorestifo/igc.cr/actions/workflows/test.yml)
+
 FAI Compliant IGC file parser.
 
 Implemented version: [2020-11-25](https://www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf)
